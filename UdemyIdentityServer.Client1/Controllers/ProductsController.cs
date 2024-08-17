@@ -1,5 +1,6 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -10,11 +11,14 @@ namespace UdemyIdentityServer.Client1.Controllers
 {
     public class ProductsController : Controller
     {
+        private const string CacheKey = "ClientCredentialsToken";
         private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _memoryCache;
 
-        public ProductsController(IConfiguration configuration)
+        public ProductsController(IConfiguration configuration, IMemoryCache memoryCache)
         {
             _configuration = configuration;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IActionResult> Index()
@@ -30,22 +34,31 @@ namespace UdemyIdentityServer.Client1.Controllers
                 //loglama yapılabilir
             };
 
-            ClientCredentialsTokenRequest clientCredentialsTokenRequest = new ClientCredentialsTokenRequest();
+            TokenResponse tokenResponse = _memoryCache.Get<TokenResponse>(CacheKey);
 
-            clientCredentialsTokenRequest.ClientId = _configuration["Client:ClientId"]!;
-            clientCredentialsTokenRequest.ClientSecret = _configuration["Client:ClientSecret"];
-            clientCredentialsTokenRequest.Address = disco.TokenEndpoint;
+            tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            {
+                ClientId = _configuration["Client:ClientId"],
+                ClientSecret = _configuration["Client:ClientSecret"],
+                Address = disco.TokenEndpoint
+            });
 
-            var token = await httpClient.RequestClientCredentialsTokenAsync(clientCredentialsTokenRequest);
+            //ClientCredentialsTokenRequest clientCredentialsTokenRequest = new ClientCredentialsTokenRequest();
 
-            if(token.IsError)
+            //clientCredentialsTokenRequest.ClientId = _configuration["Client:ClientId"]!;
+            //clientCredentialsTokenRequest.ClientSecret = _configuration["Client:ClientSecret"];
+            //clientCredentialsTokenRequest.Address = disco.TokenEndpoint;
+
+            //var token = await httpClient.RequestClientCredentialsTokenAsync(clientCredentialsTokenRequest);
+
+            if(tokenResponse.IsError)
             {
                 //loglama yapılabilir
             }
 
             //https://localhost:7257
 
-            httpClient.SetBearerToken(token.AccessToken);
+            httpClient.SetBearerToken(tokenResponse.AccessToken);
 
             var response = await httpClient.GetAsync("https://localhost:7290/api/products/getproducts");
 

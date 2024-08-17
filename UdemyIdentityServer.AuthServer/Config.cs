@@ -1,5 +1,7 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
+using IdentityServer4.Test;
+using System.Security.Claims;
 
 namespace UdemyIdentityServer.AuthServer
 {
@@ -27,7 +29,35 @@ namespace UdemyIdentityServer.AuthServer
                 new ApiScope("api2.update", "API2 için güncelleme izni"),
             };
         }
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>()
+            {
+                new IdentityResources.OpenId(),// Tokenın içindeki subject ıd =>subıd bilgisini almak için
+                new IdentityResources.Profile() // Kullanıcı hakkında belli claimleri almak için
+            };
+        }
 
+        public static IEnumerable<TestUser> GetUsers()
+        {
+            return new List<TestUser>()
+            {
+                new TestUser{SubjectId = "1", Username = "CSavas", Password = "Password12*", Claims = new List<Claim>()
+                    {
+                        new Claim("given_name", "Çağla"),
+                        new Claim("family_name", "Savaş")
+                    }
+                },
+
+                new TestUser{SubjectId = "2", Username = "SSavas", Password = "Password12*", Claims = new List<Claim>()
+                    {
+                            new Claim("given_name", "Sinem"),
+                            new Claim("family_name", "Savaş")
+                    }
+                }
+            };
+
+        }
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client>()
@@ -56,7 +86,7 @@ namespace UdemyIdentityServer.AuthServer
                     ClientName = "Client1 app uygulaması",
                     ClientSecrets = new[] { new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.Hybrid,
-                    RedirectUris = new List<string>{ "https://localhost:7077/signin-oidc"}, // Tokenın döneceği url, yani token alma işlemini yapan url-Kulanının yönlendirileceği url username ve şifreyi girdikten sonra
+                    RedirectUris = new List<string>{ "https://localhost:7257/signin-oidc"}, // Tokenın döneceği url, yani token alma işlemini yapan url-Kulanının yönlendirileceği url username ve şifreyi girdikten sonra
                     AllowedScopes = {IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile},
                 }
             };
