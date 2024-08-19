@@ -16,7 +16,6 @@ namespace UdemyIdentityServer.AuthServer
                  new ApiResource("resource_api2") {Scopes = { "api2.read", "api2.write", "api2.update" }, ApiSecrets = new[]{new Secret("secretapi2".Sha256())}}
             };
         }
-
         public static IEnumerable<ApiScope> GetApiScopes()
         {
             return new List<ApiScope>()
