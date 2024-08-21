@@ -14,6 +14,9 @@ builder.Services.AddAuthentication(options =>
         options.ClientSecret = "secret";
         options.ResponseType = "code id_token";
         options.GetClaimsFromUserInfoEndpoint = true; // UserInfo endpointten gelen bilgileri almak için; bu ep'e istek yapacak ve oradan gelen cliamleri otomatik bir þekilde ekleyecek.
+        options.SaveTokens = true;
+        options.Scope.Add("api1.read");
+        options.Scope.Add("offline_access");
     });
 
 builder.Services.AddControllersWithViews();
