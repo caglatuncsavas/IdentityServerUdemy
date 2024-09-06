@@ -108,6 +108,27 @@ namespace UdemyIdentityServer.AuthServer
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
+                    RequireConsent = false
+                },
+                 new Client()
+                {
+                    ClientId = "Client2-Mvc",
+                    RequirePkce = false,
+                    ClientName = "Client2 app uygulaması",
+                    ClientSecrets = new[] { new Secret("secret".Sha256())},
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    RedirectUris = new List<string>{ "https://localhost:7251/signin-oidc"}, // Tokenın döneceği url, yani token alma işlemini yapan url-Kulanının yönlendirileceği url username ve şifreyi girdikten sonra
+                    PostLogoutRedirectUris = new List<string>{ "https://localhost:7251/signout-callback-oidc"}, // Kullanıcı logout olduğunda yönlendirileceği url
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile, "api1.read",
+                        IdentityServerConstants.StandardScopes.OfflineAccess, "CountryAndCity", "Roles"},
+
+                    AccessTokenLifetime = 2*60*60,// 2 saatlik saniye cinsinden
+                    AllowOfflineAccess = true,// Refresh token alabilmek için
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
                     RequireConsent = true
                 }
             };
