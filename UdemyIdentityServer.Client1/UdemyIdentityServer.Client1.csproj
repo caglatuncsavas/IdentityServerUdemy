@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Users\Admin.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="IdentityModel" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -14,6 +18,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UdemyIdentityServer.API1\UdemyIdentityServer.API1.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Users\Admin.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Users\Admin.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Users\Admin.cshtml" />
   </ItemGroup>
 
 </Project>

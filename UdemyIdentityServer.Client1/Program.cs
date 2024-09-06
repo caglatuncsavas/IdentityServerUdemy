@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(options =>
@@ -5,7 +7,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = "Cookies";
     options.DefaultChallengeScheme = "oidc"; // OpenId Connect => IdentityServerdan gelen cookie ile haberle?ecek.
 })
-    .AddCookie("Cookies")
+    .AddCookie("Cookies",options =>
+    {
+        options.AccessDeniedPath = "/Home/AccessDenied";
+    })
     .AddOpenIdConnect("oidc", options =>
     {
         options.SignInScheme = "Cookies";
@@ -17,6 +22,17 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
         options.Scope.Add("api1.read");
         options.Scope.Add("offline_access");
+        options.Scope.Add("CountryAndCity");
+        options.Scope.Add("Roles");
+
+        options.ClaimActions.MapUniqueJsonKey("country", "country");
+        options.ClaimActions.MapUniqueJsonKey("city", "city");
+        options.ClaimActions.MapUniqueJsonKey("role", "role");
+
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            RoleClaimType = "role"
+        };
     });
 
 builder.Services.AddControllersWithViews();

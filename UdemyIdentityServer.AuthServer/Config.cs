@@ -1,6 +1,8 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.Security.Claims;
 
 namespace UdemyIdentityServer.AuthServer
@@ -33,7 +35,10 @@ namespace UdemyIdentityServer.AuthServer
             return new List<IdentityResource>()
             {
                 new IdentityResources.OpenId(),// Tokenın içindeki subject ıd =>subıd bilgisini almak için
-                new IdentityResources.Profile() // Kullanıcı hakkında belli claimleri almak için
+                new IdentityResources.Profile(), // Kullanıcı hakkında belli claimleri almak için
+                new IdentityResource(){ Name = "CountryAndCity", DisplayName = "Country and City", Description = "Kullanıcının ülke ve şehir bilgisi",
+                UserClaims = new[]{"country","city" } },
+                new IdentityResource(){Name = "Roles", DisplayName = "Roles", Description = "Kullanıcı rolleri", UserClaims = new[]{"role"}}
             };
         }
 
@@ -44,14 +49,20 @@ namespace UdemyIdentityServer.AuthServer
                 new TestUser{SubjectId = "1", Username = "CSavas", Password = "Password12*", Claims = new List<Claim>()
                     {
                         new Claim("given_name", "Çağla"),
-                        new Claim("family_name", "Savaş")
+                        new Claim("family_name", "Savaş"),
+                        new Claim("country", "Türkiye"),
+                        new Claim("city", "Ankara"),
+                        new Claim("role", "admin")
                     }
                 },
 
                 new TestUser{SubjectId = "2", Username = "SSavas", Password = "Password12*", Claims = new List<Claim>()
                     {
-                            new Claim("given_name", "Sinem"),
-                            new Claim("family_name", "Savaş")
+                        new Claim("given_name", "Sinem"),
+                        new Claim("family_name", "Savaş"),
+                        new Claim("country", "Türkiye"),
+                        new Claim("city", "İstanbul"),
+                        new Claim("role", "customer")
                     }
                 }
             };
@@ -90,7 +101,7 @@ namespace UdemyIdentityServer.AuthServer
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId, 
                         IdentityServerConstants.StandardScopes.Profile, "api1.read", 
-                        IdentityServerConstants.StandardScopes.OfflineAccess},
+                        IdentityServerConstants.StandardScopes.OfflineAccess, "CountryAndCity", "Roles"},
 
                     AccessTokenLifetime = 2*60*60,// 2 saatlik saniye cinsinden
                     AllowOfflineAccess = true,// Refresh token alabilmek için
