@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using UdemyIdentityServer.AuthServer;
 using UdemyIdentityServer.AuthServer.Models;
+using UdemyIdentityServer.AuthServer.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<ICustomUserRepository, CustomUserRepository>();
 
 builder.Services.AddDbContext<CustomDbContext>(options =>
 {
