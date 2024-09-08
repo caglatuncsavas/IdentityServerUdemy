@@ -1,6 +1,15 @@
+using Microsoft.EntityFrameworkCore;
 using UdemyIdentityServer.AuthServer;
+using UdemyIdentityServer.AuthServer.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<CustomDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
+});
+
 
 builder.Services.AddIdentityServer()
     .AddInMemoryApiResources(Config.GetApiResources())
