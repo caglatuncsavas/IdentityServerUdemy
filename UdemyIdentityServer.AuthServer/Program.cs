@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UdemyIdentityServer.AuthServer;
 using UdemyIdentityServer.AuthServer.Models;
 using UdemyIdentityServer.AuthServer.Repository;
+using UdemyIdentityServer.AuthServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +19,9 @@ builder.Services.AddIdentityServer()
     .AddInMemoryApiScopes(Config.GetApiScopes())
     .AddInMemoryClients(Config.GetClients())
     .AddInMemoryIdentityResources(Config.GetIdentityResources())
-    .AddTestUsers(Config.GetUsers().ToList())
-    .AddDeveloperSigningCredential(); // Development için private ve public key olu?turur.
+    //.AddTestUsers(Config.GetUsers().ToList())
+    .AddDeveloperSigningCredential() // Development için private ve public key olu?turur.
+    .AddProfileService<CustomProfileService>(); 
 
 builder.Services.AddControllersWithViews();
 
