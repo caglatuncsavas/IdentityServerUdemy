@@ -4,7 +4,9 @@ using UdemyIdentityServer.Client1.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IApiResourceHttpClient, ApiResourceHttpClient>();
+//builder.Services.AddScoped<IApiResourceHttpClient, ApiResourceHttpClient>();
+builder.Services.AddHttpClient<IApiResourceHttpClient, ApiResourceHttpClient>();
+
 
 builder.Services.AddAuthentication(options =>
 {
