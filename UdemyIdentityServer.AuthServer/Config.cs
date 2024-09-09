@@ -34,6 +34,7 @@ namespace UdemyIdentityServer.AuthServer
         {
             return new List<IdentityResource>()
             {
+                new IdentityResources.Email(),
                 new IdentityResources.OpenId(),// Tokenın içindeki subject ıd =>subıd bilgisini almak için
                 new IdentityResources.Profile(), // Kullanıcı hakkında belli claimleri almak için
                 new IdentityResource(){ Name = "CountryAndCity", DisplayName = "Country and City", Description = "Kullanıcının ülke ve şehir bilgisi",
@@ -99,6 +100,7 @@ namespace UdemyIdentityServer.AuthServer
                     RedirectUris = new List<string>{ "https://localhost:7257/signin-oidc"}, // Tokenın döneceği url, yani token alma işlemini yapan url-Kulanının yönlendirileceği url username ve şifreyi girdikten sonra
                     PostLogoutRedirectUris = new List<string>{ "https://localhost:7257/signout-callback-oidc"}, // Kullanıcı logout olduğunda yönlendirileceği url
                     AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OpenId, 
                         IdentityServerConstants.StandardScopes.Profile, "api1.read", 
                         IdentityServerConstants.StandardScopes.OfflineAccess, "CountryAndCity", "Roles"},

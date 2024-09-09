@@ -28,6 +28,7 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("offline_access");
         options.Scope.Add("CountryAndCity");
         options.Scope.Add("Roles");
+        options.Scope.Add("email");
 
         options.ClaimActions.MapUniqueJsonKey("country", "country");
         options.ClaimActions.MapUniqueJsonKey("city", "city");
@@ -35,7 +36,9 @@ builder.Services.AddAuthentication(options =>
 
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
-            RoleClaimType = "role"
+            RoleClaimType = "role",
+            NameClaimType = "name"
+
         };
     });
 
