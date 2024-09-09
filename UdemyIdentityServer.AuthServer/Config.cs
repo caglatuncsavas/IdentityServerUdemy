@@ -132,7 +132,42 @@ namespace UdemyIdentityServer.AuthServer
                     RefreshTokenExpiration = TokenExpiration.Absolute,
                     AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
                     RequireConsent = true
-                }
+                },
+                    new Client()
+                {
+                    ClientId = "js-client",
+                    RequireClientSecret = false,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    ClientName = "Js Client (Angular)",
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile, "api1.read",
+                        IdentityServerConstants.StandardScopes.OfflineAccess, "CountryAndCity", "Roles"},
+
+                    RedirectUris = {"http://localhost:4200/callback"},
+                    AllowedCorsOrigins = {"http://localhost:4200"},
+                    PostLogoutRedirectUris = {"http://localhost:4200"}
+
+                },
+                    new Client()
+                {
+                    ClientId = "Client1-ResourceOwner-Mvc",
+                    ClientName = "Client1 app uygulaması",
+                    ClientSecrets = new[] { new Secret("secret".Sha256())},
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,                  
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.Email,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile, "api1.read",
+                        IdentityServerConstants.StandardScopes.OfflineAccess, "CountryAndCity", "Roles"},
+
+                    AccessTokenLifetime = 2*60*60,// 2 saatlik saniye cinsinden
+                    AllowOfflineAccess = true,// Refresh token alabilmek için
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
+                },
             };
         }
     }

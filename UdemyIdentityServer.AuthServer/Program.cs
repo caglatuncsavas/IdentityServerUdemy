@@ -21,7 +21,8 @@ builder.Services.AddIdentityServer()
     .AddInMemoryIdentityResources(Config.GetIdentityResources())
     //.AddTestUsers(Config.GetUsers().ToList())
     .AddDeveloperSigningCredential() // Development için private ve public key olu?turur.
-    .AddProfileService<CustomProfileService>(); 
+    .AddProfileService<CustomProfileService>()
+    .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
 
 builder.Services.AddControllersWithViews();
 
