@@ -23,12 +23,13 @@ namespace UdemyIdentityServer.Client1.Controllers
             return View();
         }
 
-        public async Task LogOut()
+        public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync("Cookies");
-            await HttpContext.SignOutAsync("oidc");
-        }
+            //await HttpContext.SignOutAsync("oidc"); Bu metotla identity server'dan çıkış gerçekleiyordu. Ancak artık identity server'dan çıkış işlemini yapmıyoruz. 
 
+            return RedirectToAction("Index", "Home");
+        }
         public async Task<IActionResult> GetRefreshToken()
         {
             //Tekrardan signin yapacağız, yeni bir cookie oluşacak.
@@ -45,8 +46,8 @@ namespace UdemyIdentityServer.Client1.Controllers
 
             RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
 
-            refreshTokenRequest.ClientId = _configuration["Client1Mvc:ClientId"];
-            refreshTokenRequest.ClientSecret = _configuration["Client1Mvc: ClientSecret"];
+            refreshTokenRequest.ClientId = _configuration["ClientResourceOwner:ClientId"];
+            refreshTokenRequest.ClientSecret = _configuration["ClientResourceOwner: ClientSecret"];
             refreshTokenRequest.RefreshToken = refreshToken;
             refreshTokenRequest.Address = disco.TokenEndpoint;
 

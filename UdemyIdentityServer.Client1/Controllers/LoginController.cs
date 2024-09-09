@@ -46,6 +46,8 @@ namespace UdemyIdentityServer.Client1.Controllers
 
             if (token.IsError) 
             {
+
+                ModelState.AddModelError("","Email veya şifreniz yanlış");
                 // hata ve loglama
             }
 

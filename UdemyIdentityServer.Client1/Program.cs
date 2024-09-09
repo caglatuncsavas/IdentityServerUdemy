@@ -11,38 +11,39 @@ builder.Services.AddHttpClient<IApiResourceHttpClient, ApiResourceHttpClient>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "oidc"; // OpenId Connect => IdentityServerdan gelen cookie ile haberle?ecek.
+    // options.DefaultChallengeScheme = "oidc"; // OpenId Connect => IdentityServerdan gelen cookie ile haberle?ecek.
 })
-    .AddCookie("Cookies",options =>
+    .AddCookie("Cookies", options =>
     {
+        options.LoginPath = "/Login/Index";
         options.AccessDeniedPath = "/Home/AccessDenied";
-    })
-    .AddOpenIdConnect("oidc", options =>
-    {
-        options.SignInScheme = "Cookies";
-        options.Authority = "https://localhost:7296";
-        options.ClientId = "Client1-Mvc";
-        options.ClientSecret = "secret";
-        options.ResponseType = "code id_token";
-        options.GetClaimsFromUserInfoEndpoint = true; // UserInfo endpointten gelen bilgileri almak için; bu ep'e istek yapacak ve oradan gelen cliamleri otomatik bir þekilde ekleyecek.
-        options.SaveTokens = true;
-        options.Scope.Add("api1.read");
-        options.Scope.Add("offline_access");
-        options.Scope.Add("CountryAndCity");
-        options.Scope.Add("Roles");
-        options.Scope.Add("email");
-
-        options.ClaimActions.MapUniqueJsonKey("country", "country");
-        options.ClaimActions.MapUniqueJsonKey("city", "city");
-        options.ClaimActions.MapUniqueJsonKey("role", "role");
-
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
-            RoleClaimType = "role",
-            NameClaimType = "name"
-
-        };
     });
+    //.AddOpenIdConnect("oidc", options =>
+    //{
+    //    options.SignInScheme = "Cookies";
+    //    options.Authority = "https://localhost:7296";
+    //    options.ClientId = "Client1-Mvc";
+    //    options.ClientSecret = "secret";
+    //    options.ResponseType = "code id_token";
+    //    options.GetClaimsFromUserInfoEndpoint = true; // UserInfo endpointten gelen bilgileri almak için; bu ep'e istek yapacak ve oradan gelen cliamleri otomatik bir þekilde ekleyecek.
+    //    options.SaveTokens = true;
+    //    options.Scope.Add("api1.read");
+    //    options.Scope.Add("offline_access");
+    //    options.Scope.Add("CountryAndCity");
+    //    options.Scope.Add("Roles");
+    //    options.Scope.Add("email");
+
+    //    options.ClaimActions.MapUniqueJsonKey("country", "country");
+    //    options.ClaimActions.MapUniqueJsonKey("city", "city");
+    //    options.ClaimActions.MapUniqueJsonKey("role", "role");
+
+    //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    //    {
+    //        RoleClaimType = "role",
+    //        NameClaimType = "name"
+
+    //    };
+   // });
 
 builder.Services.AddControllersWithViews();
 
